@@ -25,6 +25,8 @@
 		<!-- Editable user database that can also be used by UserDatabaseRealm 
 			to authenticate users -->
 		<Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
+			
+		 
 	</GlobalNamingResources>
 
 	<!-- A "Service" is a collection of one or more "Connectors" that share 
@@ -43,10 +45,8 @@
 			and responses are returned. Documentation at : Java HTTP Connector: /docs/config/http.html 
 			Java AJP Connector: /docs/config/ajp.html APR (HTTP/AJP) Connector: /docs/apr.html 
 			Define a non-SSL/TLS HTTP/1.1 Connector on port 8080 -->
-		<Connector SSLEnabled="true" clientAuth="false" connectionTimeout="20000" keyAlias="tomcat_ssl" keystoreFile="d:/.keystore" keystorePass="123456" maxThreds="150" port="443" protocol="HTTP/1.1" scheme="https" secure="true" sslProtocol="TLS"/>
-
-		<Connector connectionTimeout="20000" port="80" protocol="HTTP/1.1" redirectPort="443"/>
-    <!-- A "Connector" using the shared thread pool -->
+		<Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
+		<!-- A "Connector" using the shared thread pool -->
 		<!-- <Connector executor="tomcatThreadPool" port="8080" protocol="HTTP/1.1" 
 			connectionTimeout="20000" redirectPort="8443" /> -->
 		<!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 This connector uses 
@@ -104,16 +104,15 @@
 					Note: The pattern used is equivalent to using pattern="common" -->
 				<Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-				<Context docBase="JSPStudy" path="/JSPStudy" reloadable="true" source="org.eclipse.jst.jee.server:JSPStudy"/>
-				<Context docBase="demo" path="/demo" reloadable="true" source="org.eclipse.jst.jee.server:demo"/>
-				<Context docBase="html" path="/html" reloadable="true" source="org.eclipse.jst.jee.server:html"/>
-				<Context docBase="js" path="/js" reloadable="true" source="org.eclipse.jst.jee.server:js"/>
 				<Context docBase="garam" path="/garam" reloadable="true" source="org.eclipse.jst.jee.server:garam"/>
-				<Context docBase="test0420" path="/test0420" reloadable="true" source="org.eclipse.jst.jee.server:test0420"/>
-				<Context docBase="css" path="/css" reloadable="true" source="org.eclipse.jst.jee.server:css"/>
-				<Context docBase="bootstrap" path="/bootstrap" reloadable="true" source="org.eclipse.jst.jee.server:bootstrap"/>
-				<Context docBase="jquery" path="/jquery" reloadable="true" source="org.eclipse.jst.jee.server:jquery"/>
-			<Context docBase="mvc" path="/mvc" reloadable="true" source="org.eclipse.jst.jee.server:mvc"/></Host>
+				<Context docBase="mvc" path="/mvc" reloadable="true" source="org.eclipse.jst.jee.server:mvc">
+					<Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" maxIdle="30" maxTotal="100" maxWaitMillis="10000" name="jdbc/garam" password="smart" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/garam?characterEncoding=UTF-8&amp;serverTimezone=Asia/Seoul" username="root"/>
+				</Context>
+					
+			<Context docBase="mvcJstl" path="/mvcJstl" reloadable="true" source="org.eclipse.jst.jee.server:mvcJstl">
+				<Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" maxIdle="30" maxTotal="100" maxWaitMillis="10000" name="jdbc/garam" password="smart" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/garam?characterEncoding=UTF-8&amp;serverTimezone=Asia/Seoul" username="root"/>
+			</Context>
+			</Host>
 		</Engine>
 	</Service>
 </Server>
